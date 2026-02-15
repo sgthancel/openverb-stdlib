@@ -21,7 +21,7 @@ jobs:
           node-version: "20"
 
       - name: Validate JSON manifests
-        run: node scripts/validate-manifests.js
+        run: node scripts/validate-manifests.cjs
 
   lint:
     name: Check Formatting

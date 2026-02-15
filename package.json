@@ -1,9 +1,10 @@
 {
-  "name": "openverb-stdlib",
+  "name": "@openverb/stdlib",
   "version": "0.1.0",
-  "description": "OpenVerb Standard Library — canonical verbs for AI-app interaction (theme, navigation, search, modals, forms, sessions)",
+  "description": "OpenVerb Standard Library — canonical verb definitions for AI-app interaction (theme, navigation, search, modals, forms, sessions)",
   "main": "reference/vanilla/verbs.js",
   "types": "reference/react/useOpenVerb.ts",
+  "type": "module",
   "files": [
     "manifests/",
     "reference/",
@@ -13,8 +14,8 @@
   "scripts": {
     "lint": "prettier --check .",
     "format": "prettier --write .",
-    "validate": "node scripts/validate-manifests.js",
-    "test": "node scripts/validate-manifests.js"
+    "validate": "node scripts/validate-manifests.cjs",
+    "test": "node scripts/validate-manifests.cjs"
   },
   "repository": {
     "type": "git",
@@ -41,6 +42,14 @@
     "url": "https://github.com/sgthancel/openverb-stdlib/issues"
   },
   "homepage": "https://github.com/sgthancel/openverb-stdlib#readme",
+  "peerDependencies": {
+    "openverb": ">=0.1.0"
+  },
+  "peerDependenciesMeta": {
+    "openverb": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "prettier": "^3.2.0"
   },

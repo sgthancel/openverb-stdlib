@@ -44,11 +44,33 @@ Think of it like Python's standard library, but for AI-app interaction. OpenVerb
 | 1 | App Operations Starter | CRUD, table filters, export, settings |
 | 2 | Domain Packs | GIS, Pantry, CAD, etc. |
 
+## Part of the OpenVerb Ecosystem
+
+This is the **standard library** for the [OpenVerb](https://github.com/sgthancel/openverb) framework — an open, text-first standard for describing what actions an AI is allowed to perform inside an application.
+
+| Package | Registry | Description |
+|---------|----------|-------------|
+| `openverb` | [npm](https://www.npmjs.com/package/openverb) / [PyPI](https://pypi.org/project/openverb/) | Core framework — load & validate verb libraries |
+| `@openverb/stdlib` | npm (this repo) | Standard verb definitions for common UI operations |
+
 ## Quick Start
 
-### 1. Copy the manifests
+### 1. Install
 
-Grab the JSON files from `manifests/` and add them to your app's verb definitions:
+```bash
+# Install the core framework + standard library
+npm install openverb @openverb/stdlib
+```
+
+Or with Python:
+```bash
+pip install openverb
+# Then copy manifests/ from this repo into your project
+```
+
+### 2. Use the manifests
+
+The JSON verb definitions live in `manifests/`:
 
 ```
 manifests/
@@ -61,7 +83,7 @@ manifests/
   user.session.json
 ```
 
-### 2. Implement handlers
+### 3. Implement handlers
 
 Use one of the reference implementations or write your own:
 
@@ -69,7 +91,7 @@ Use one of the reference implementations or write your own:
 - **React** — `reference/react/useOpenVerb.ts`
 - **Next.js** — `reference/nextjs/verbs.ts`
 
-### 3. Wire up your AI
+### 4. Wire up your AI
 
 When your AI receives a verb call, dispatch it to your handler:
 
@@ -78,7 +100,7 @@ const result = executeVerb("ui.nav.go", { routeId: "accounting" });
 // → { success: true, path: "/accounting" }
 ```
 
-### 4. Apply client-side effects
+### 5. Apply client-side effects
 
 Verbs return data. Your client applies the effect:
 
