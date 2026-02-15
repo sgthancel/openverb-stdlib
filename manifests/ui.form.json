@@ -1,0 +1,153 @@
+{
+  "family": "ui.form",
+  "version": "1.0.0",
+  "verbs": [
+    {
+      "id": "ui.form.list",
+      "version": "1.0.0",
+      "summary": "List all registered forms on the current page or view.",
+      "input": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "forms": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Form identifier"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Human-readable form name"
+                },
+                "fields": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "type": {
+                        "type": "string",
+                        "description": "Field type (text, email, number, select, etc.)"
+                      },
+                      "label": {
+                        "type": "string"
+                      },
+                      "required": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ui.form.fill",
+      "version": "1.0.0",
+      "summary": "Fill form fields with values. Does not submit — use ui.form.submit after filling.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "formId": {
+            "type": "string",
+            "description": "Form identifier"
+          },
+          "values": {
+            "type": "object",
+            "description": "Key-value map of field names to values"
+          }
+        },
+        "required": ["formId", "values"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "filled": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "List of field names that were filled"
+          }
+        }
+      }
+    },
+    {
+      "id": "ui.form.submit",
+      "version": "1.0.0",
+      "summary": "Submit a form by id. Returns validation errors if the form is invalid.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "formId": {
+            "type": "string",
+            "description": "Form identifier"
+          }
+        },
+        "required": ["formId"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "field": {
+                  "type": "string"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "description": "Validation errors (empty if success)"
+          }
+        }
+      }
+    },
+    {
+      "id": "ui.form.reset",
+      "version": "1.0.0",
+      "summary": "Reset a form to its default values.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "formId": {
+            "type": "string",
+            "description": "Form identifier"
+          }
+        },
+        "required": ["formId"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  ]
+}

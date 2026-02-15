@@ -1,0 +1,93 @@
+{
+  "family": "ui.search",
+  "version": "1.0.0",
+  "verbs": [
+    {
+      "id": "ui.search.query",
+      "version": "1.0.0",
+      "summary": "Search the app's content. Returns a list of results the AI can present or act on.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "query": {
+            "type": "string",
+            "description": "Search query string"
+          },
+          "scope": {
+            "type": "string",
+            "description": "Optional scope to narrow results (e.g. 'pages', 'docs', 'products')"
+          },
+          "limit": {
+            "type": "number",
+            "description": "Max results to return (default: 10)"
+          }
+        },
+        "required": ["query"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Stable result identifier"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Human-readable title"
+                },
+                "snippet": {
+                  "type": "string",
+                  "description": "Short preview of the matched content"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "Path or URL to the result"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "Result type (e.g. 'page', 'doc', 'product')"
+                }
+              }
+            }
+          },
+          "total": {
+            "type": "number",
+            "description": "Total number of matching results"
+          }
+        }
+      }
+    },
+    {
+      "id": "ui.search.open_result",
+      "version": "1.0.0",
+      "summary": "Open a search result by id. Navigates the user to the result.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "resultId": {
+            "type": "string",
+            "description": "Result id from ui.search.query"
+          }
+        },
+        "required": ["resultId"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "url": {
+            "type": "string",
+            "description": "Path navigated to"
+          }
+        }
+      }
+    }
+  ]
+}

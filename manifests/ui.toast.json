@@ -1,0 +1,65 @@
+{
+  "family": "ui.toast",
+  "version": "1.0.0",
+  "verbs": [
+    {
+      "id": "ui.toast.show",
+      "version": "1.0.0",
+      "summary": "Show a toast notification to the user. Use for confirmations, warnings, or transient messages.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Message to display"
+          },
+          "variant": {
+            "type": "string",
+            "enum": ["info", "success", "warning", "error"],
+            "description": "Toast style (default: info)"
+          },
+          "duration": {
+            "type": "number",
+            "description": "Auto-dismiss after ms (default: 5000, 0 = persistent)"
+          }
+        },
+        "required": ["message"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "toastId": {
+            "type": "string",
+            "description": "Id of the created toast (for programmatic dismiss)"
+          }
+        }
+      }
+    },
+    {
+      "id": "ui.toast.dismiss",
+      "version": "1.0.0",
+      "summary": "Dismiss a toast notification by id, or dismiss all toasts.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "toastId": {
+            "type": "string",
+            "description": "Toast id to dismiss. Omit to dismiss all."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        }
+      }
+    }
+  ]
+}

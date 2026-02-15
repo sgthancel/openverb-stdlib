@@ -1,0 +1,98 @@
+{
+  "family": "user.session",
+  "version": "1.0.0",
+  "verbs": [
+    {
+      "id": "user.session.get",
+      "version": "1.0.0",
+      "summary": "Get the current user's session info. Returns auth status, display name, and role. Never exposes tokens or passwords.",
+      "input": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "authenticated": {
+            "type": "boolean",
+            "description": "Whether the user is logged in"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "role": {
+                "type": "string",
+                "description": "User role (e.g. admin, member, viewer)"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "user.session.logout",
+      "version": "1.0.0",
+      "summary": "Log the user out. Requires explicit user confirmation before the AI calls this.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "confirmed": {
+            "type": "boolean",
+            "description": "Must be true. AI should always confirm with user before calling."
+          }
+        },
+        "required": ["confirmed"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "id": "user.session.get_preferences",
+      "version": "1.0.0",
+      "summary": "Get the current user's preferences (language, timezone, notification settings, etc.).",
+      "input": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "preferences": {
+            "type": "object",
+            "properties": {
+              "language": {
+                "type": "string",
+                "description": "Preferred language code (e.g. 'en', 'es')"
+              },
+              "timezone": {
+                "type": "string",
+                "description": "IANA timezone (e.g. 'America/New_York')"
+              },
+              "notifications": {
+                "type": "boolean",
+                "description": "Whether notifications are enabled"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

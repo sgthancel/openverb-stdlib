@@ -1,0 +1,94 @@
+{
+  "family": "ui.modal",
+  "version": "1.0.0",
+  "verbs": [
+    {
+      "id": "ui.modal.open",
+      "version": "1.0.0",
+      "summary": "Open a modal by id. The app registers named modals; the AI triggers them by id.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "modalId": {
+            "type": "string",
+            "description": "Registered modal identifier"
+          },
+          "data": {
+            "type": "object",
+            "description": "Optional data to pass into the modal (e.g. pre-fill values)"
+          }
+        },
+        "required": ["modalId"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "modalId": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    {
+      "id": "ui.modal.close",
+      "version": "1.0.0",
+      "summary": "Close the currently open modal, or a specific modal by id.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "modalId": {
+            "type": "string",
+            "description": "Modal id to close. Omit to close the top-most modal."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    {
+      "id": "ui.modal.list",
+      "version": "1.0.0",
+      "summary": "List all registered modals the AI can open.",
+      "input": {
+        "type": "object",
+        "properties": {},
+        "required": []
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "modals": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Modal identifier"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Human-readable modal name"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "What the modal does"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
