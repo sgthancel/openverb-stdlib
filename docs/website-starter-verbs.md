@@ -1,10 +1,10 @@
 # OpenVerb Website Starter Verbs
 
-**OpenVerb Standard Library** is a set of canonical verbs most apps need (theme, navigation, search, modals, toasts, forms, sessions). It lets you expose common UI capabilities to AI in a deterministic, auditable way — without DOM hacks or brittle selectors.
+**OpenVerb Standard Library** provides the starter verb definitions that every app should have. These are not exhaustive — they're the common baseline that gives an AI agent immediate capabilities. Your app defines its own verb libraries for domain-specific actions on top of these.
 
 ## Level 0: Website UI Starter
 
-The smallest set that makes the AI feel like it can operate any site.
+The starter set of verbs that every app should ship with. These give an AI the basics it needs to operate any site. Your app extends this with its own verb libraries for domain-specific functionality.
 
 | Family       | Verbs                        | Purpose                      |
 | ------------ | ---------------------------- | ---------------------------- |

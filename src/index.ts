@@ -1,9 +1,12 @@
 /**
  * @openverb/stdlib — OpenVerb Standard Library
  *
- * Canonical verb definitions for AI-app interaction.
- * 7 families, 19 verbs covering theme, navigation, search,
- * modals, toasts, forms, and user sessions.
+ * Starter verb definitions that every app should have.
+ * These are not exhaustive — they're the common baseline.
+ * Apps define their own verb libraries for domain-specific actions.
+ *
+ * Level 0 (Website UI Starter): 7 families, 19 verbs
+ * covering theme, navigation, search, modals, toasts, forms, and sessions.
  */
 
 export { manifests, getManifest, getAllVerbs, findVerb } from "./manifests.js";

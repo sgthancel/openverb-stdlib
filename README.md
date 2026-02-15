@@ -5,13 +5,13 @@
 [![Verbs](https://img.shields.io/badge/verbs-19-blue.svg)](docs/website-starter-verbs.md)
 [![Families](https://img.shields.io/badge/families-7-blue.svg)](docs/website-starter-verbs.md)
 
-A set of canonical verbs most apps need (theme, navigation, search, modals, toasts, forms, sessions). Expose common UI capabilities to AI in a deterministic, auditable way — without DOM hacks or brittle selectors.
+A starter set of verb definitions that every app should have — theme, navigation, search, modals, toasts, forms, and sessions. These are the common baseline. Your app defines its own verb libraries for domain-specific actions on top of these.
 
-> **Install this, and your AI can operate your app.**
+> **The verbs every app needs. Your app adds the rest.**
 
 ## What This Is
 
-Think of it like Python's standard library, but for AI-app interaction. OpenVerb Standard Library gives you the verbs that every app needs so an AI agent can:
+This is **not** a complete list of all possible verbs — OpenVerb is designed so developers create their own verb libraries for their own domains. This stdlib gives you the **starter verbs** that virtually every app needs, so an AI agent can immediately:
 
 - Switch themes
 - Navigate pages
@@ -35,7 +35,7 @@ Think of it like Python's standard library, but for AI-app interaction. OpenVerb
 | `ui.form`      | `list`, `fill`, `submit`, `reset`  | Form interaction             |
 | `user.session` | `get`, `logout`, `get_preferences` | User session & preferences   |
 
-**Total: 7 families, 19 verbs.**
+**7 starter families, 19 starter verbs.** Your app adds its own verb libraries on top of these.
 
 ### Future Levels
 

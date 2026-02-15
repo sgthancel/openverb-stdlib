@@ -1,5 +1,9 @@
 /**
- * Verb ID constants for all Level 0 verbs
+ * Verb ID constants for Level 0 starter verbs.
+ *
+ * These are the standard verbs every app should have.
+ * Your app will define additional verbs for domain-specific actions
+ * using your own verb libraries.
  */
 
 export const THEME_VERBS = {
@@ -42,7 +46,7 @@ export const SESSION_VERBS = {
   GET_PREFERENCES: "user.session.get_preferences",
 } as const;
 
-/** All 19 verb IDs */
+/** All 19 starter verb IDs (Level 0). Your app will have more. */
 export const ALL_VERB_IDS = [
   ...Object.values(THEME_VERBS),
   ...Object.values(NAV_VERBS),
