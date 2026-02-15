@@ -3,7 +3,7 @@ name: Feature Request
 about: Suggest an improvement to an existing verb or the project itself
 title: "[Feature] "
 labels: enhancement
-assignees: ''
+assignees: ""
 ---
 
 ## Summary

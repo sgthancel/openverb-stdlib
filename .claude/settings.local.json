@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cmd /c dir /a)",
+      "Bash(cmd /c tree /a)",
+      "Bash(dir:*)",
+      "Bash(powershell:*)",
+      "Bash(cmd /c \"cd /d C:\\\\Users\\\\cplha\\\\openverb-stdlib && dir /s /a\")",
+      "Bash(wc:*)",
+      "Bash(test:*)",
+      "Bash(git -C \"C:/Users/cplha/openverb-stdlib\" status)",
+      "Bash(node:*)",
+      "Bash(gh run view:*)",
+      "Bash(npm install:*)",
+      "WebFetch(domain:www.npmjs.com)",
+      "WebFetch(domain:pypi.org)",
+      "WebFetch(domain:registry.npmjs.org)",
+      "WebFetch(domain:libraries.io)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(git -C \"C:/Users/cplha/openverb-stdlib\" diff --stat)",
+      "Bash(git -C \"C:/Users/cplha/openverb-stdlib\" add .github/workflows/ci.yml README.md package.json package-lock.json scripts/validate-manifests.cjs scripts/validate-manifests.js)",
+      "Bash(git -C \"C:/Users/cplha/openverb-stdlib\" commit -m \"$\\(cat <<''EOF''\nFix CI + rename to @openverb/stdlib + link to core framework\n\n- Add package-lock.json \\(fixes `npm ci` in CI lint job\\)\n- Rename validate script to .cjs \\(compat with \"type\": \"module\"\\)\n- Rename package to @openverb/stdlib\n- Add openverb as optional peer dependency\n- Update README with OpenVerb ecosystem section and install instructions\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C \"C:/Users/cplha/openverb-stdlib\" push)",
+      "Bash(npx prettier:*)",
+      "Bash(git -C \"C:/Users/cplha/openverb-stdlib\" add -A)",
+      "Bash(git -C \"C:/Users/cplha/openverb-stdlib\" commit -m \"$\\(cat <<''EOF''\nFormat all files with Prettier\n\nFixes CI Check Formatting job — ran `prettier --write .` across\nall 16 files that had formatting discrepancies.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}

@@ -3,7 +3,7 @@ name: New Verb Proposal
 about: Propose a new verb or verb family for the standard library
 title: "[Verb] "
 labels: new-verb
-assignees: ''
+assignees: ""
 ---
 
 ## Verb ID
@@ -25,8 +25,7 @@ One sentence: what does this verb do?
 ```json
 {
   "type": "object",
-  "properties": {
-  },
+  "properties": {},
   "required": []
 }
 ```
@@ -36,8 +35,7 @@ One sentence: what does this verb do?
 ```json
 {
   "type": "object",
-  "properties": {
-  }
+  "properties": {}
 }
 ```
 

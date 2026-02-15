@@ -66,7 +66,7 @@ function buildRouteRegistry(userProjects: Project[]): Route[] {
     { id: "settings", title: "Settings", path: "/settings", tags: ["account"], requiresAuth: true },
   ];
 
-  const projectRoutes = userProjects.map(p => ({
+  const projectRoutes = userProjects.map((p) => ({
     id: `project-${p.id}`,
     title: p.name,
     path: `/projects/${p.id}`,
@@ -98,7 +98,7 @@ function getRoutesForUser(allRoutes: Route[], userRole: string): Route[] {
   };
 
   const allowed = roleAccess[userRole] || [];
-  return allRoutes.filter(r => allowed.includes(r.id));
+  return allRoutes.filter((r) => allowed.includes(r.id));
 }
 ```
 
@@ -120,12 +120,12 @@ Use `ui.search.query` to find content, then `ui.nav.go` to navigate.
 
 ### When to use search vs. nav
 
-| Use case | Verb |
-|----------|------|
-| User names a page | `ui.nav.go` (by id) |
+| Use case                      | Verb                                        |
+| ----------------------------- | ------------------------------------------- |
+| User names a page             | `ui.nav.go` (by id)                         |
 | User describes what they want | `ui.search.query` → `ui.search.open_result` |
-| User says "go back" | `ui.nav.back` |
-| AI needs to know all pages | `ui.nav.list_pages` |
+| User says "go back"           | `ui.nav.back`                               |
+| AI needs to know all pages    | `ui.nav.list_pages`                         |
 
 ---
 
@@ -191,13 +191,13 @@ The AI shouldn't propose pages that will 403. Filter the registry by the user's 
 
 ## Framework-Specific Navigation
 
-| Framework | How `ui.nav.go` applies |
-|-----------|------------------------|
-| Next.js (App Router) | `router.push(path)` |
-| Next.js (Pages Router) | `router.push(path)` |
-| React Router | `navigate(path)` |
-| Vue Router | `router.push(path)` |
-| SvelteKit | `goto(path)` |
-| Vanilla JS | `window.location.href = path` |
+| Framework              | How `ui.nav.go` applies       |
+| ---------------------- | ----------------------------- |
+| Next.js (App Router)   | `router.push(path)`           |
+| Next.js (Pages Router) | `router.push(path)`           |
+| React Router           | `navigate(path)`              |
+| Vue Router             | `router.push(path)`           |
+| SvelteKit              | `goto(path)`                  |
+| Vanilla JS             | `window.location.href = path` |
 
 The manifest is the same. Only the handler changes.

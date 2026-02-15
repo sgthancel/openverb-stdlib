@@ -59,10 +59,7 @@ interface DynamicRouteSource {
   labels?: string[];
 }
 
-export function buildDynamicRoutes(
-  prefix: string,
-  items: DynamicRouteSource[]
-): Route[] {
+export function buildDynamicRoutes(prefix: string, items: DynamicRouteSource[]): Route[] {
   return items.map((item) => ({
     id: `${prefix}-${item.id}`,
     title: item.name,
@@ -93,8 +90,6 @@ export function getRoutesForRole(
 export function findRouteByIntent(routes: Route[], query: string): Route | undefined {
   const q = query.toLowerCase();
   return routes.find(
-    (r) =>
-      r.title.toLowerCase().includes(q) ||
-      r.tags.some((t) => t.toLowerCase().includes(q))
+    (r) => r.title.toLowerCase().includes(q) || r.tags.some((t) => t.toLowerCase().includes(q))
   );
 }

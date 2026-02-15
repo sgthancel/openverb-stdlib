@@ -83,9 +83,7 @@ const verbHandlers = {
   },
 
   "ui.nav.go": ({ routeId, path }) => {
-    const target = routeId
-      ? routeRegistry.find((r) => r.id === routeId)
-      : null;
+    const target = routeId ? routeRegistry.find((r) => r.id === routeId) : null;
     const href = target ? target.path : path;
     if (!href) return { success: false };
     window.location.href = href;
@@ -104,9 +102,7 @@ const verbHandlers = {
     const q = query.toLowerCase();
     const results = routeRegistry
       .filter(
-        (r) =>
-          r.title.toLowerCase().includes(q) ||
-          r.tags.some((t) => t.toLowerCase().includes(q))
+        (r) => r.title.toLowerCase().includes(q) || r.tags.some((t) => t.toLowerCase().includes(q))
       )
       .slice(0, limit)
       .map((r) => ({

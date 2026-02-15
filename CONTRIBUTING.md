@@ -5,12 +5,15 @@ Thanks for your interest in contributing! OpenVerb is an open standard for AI-ap
 ## Ways to Contribute
 
 ### Report Issues
+
 - Found a bug in a manifest? Open an issue.
 - Unclear documentation? Open an issue.
 - Missing a verb that every app needs? Open a feature request.
 
 ### Propose New Verbs
+
 Use the **New Verb Proposal** issue template. A good proposal includes:
+
 - The verb id (e.g. `ui.table.sort`)
 - A one-line summary
 - Input/output JSON schema
@@ -18,6 +21,7 @@ Use the **New Verb Proposal** issue template. A good proposal includes:
 - Which Level it belongs to (0, 1, or 2)
 
 ### Submit Code
+
 1. Fork the repo
 2. Create a feature branch (`git checkout -b feat/my-verb`)
 3. Make your changes
@@ -54,12 +58,14 @@ Every manifest follows this structure:
 ```
 
 ### Naming Conventions
+
 - Families use dot notation: `ui.theme`, `ui.nav`, `user.session`
 - Verb ids use dot notation: `ui.theme.get`, `ui.nav.go`
 - Use snake_case for multi-word verbs: `ui.nav.list_pages`
 - Input/output property names use camelCase: `routeId`, `toastId`
 
 ### Design Rules
+
 1. **Verbs return data, clients apply effects.** A verb like `ui.nav.go` returns `{ success: true, path: "/foo" }` — the client calls `router.push`.
 2. **Use registries, not raw strings.** The AI should never guess URLs, modal ids, or form fields. Expose them via list verbs.
 3. **Separate read from write.** `ui.form.fill` and `ui.form.submit` are separate verbs so the user can review before submitting.
@@ -69,6 +75,7 @@ Every manifest follows this structure:
 ## Reference Implementations
 
 When adding a new verb family, include handlers in all three reference implementations:
+
 - `reference/vanilla/verbs.js`
 - `reference/react/useOpenVerb.ts`
 - `reference/nextjs/verbs.ts`

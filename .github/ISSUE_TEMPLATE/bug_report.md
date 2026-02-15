@@ -3,7 +3,7 @@ name: Bug Report
 about: Report a problem with a manifest, reference implementation, or documentation
 title: "[Bug] "
 labels: bug
-assignees: ''
+assignees: ""
 ---
 
 ## Describe the Bug

@@ -6,15 +6,15 @@
 
 The smallest set that makes the AI feel like it can operate any site.
 
-| Family | Verbs | Purpose |
-|--------|-------|---------|
-| ui.theme | get, set | Theme (light/dark/system) |
-| ui.nav | list_pages, go, back | Navigation & route discovery |
-| ui.search | query, open_result | On-site search |
-| ui.toast | show, dismiss | Notifications & feedback |
-| ui.modal | open, close, list | Modal dialogs |
-| ui.form | list, fill, submit, reset | Form interaction |
-| user.session | get, logout, get_preferences | User session & preferences |
+| Family       | Verbs                        | Purpose                      |
+| ------------ | ---------------------------- | ---------------------------- |
+| ui.theme     | get, set                     | Theme (light/dark/system)    |
+| ui.nav       | list_pages, go, back         | Navigation & route discovery |
+| ui.search    | query, open_result           | On-site search               |
+| ui.toast     | show, dismiss                | Notifications & feedback     |
+| ui.modal     | open, close, list            | Modal dialogs                |
+| ui.form      | list, fill, submit, reset    | Form interaction             |
+| user.session | get, logout, get_preferences | User session & preferences   |
 
 ---
 
@@ -27,6 +27,7 @@ Returns the current theme mode.
 **Input:** `{}` (no args)
 
 **Output:**
+
 ```json
 {
   "mode": "light" | "dark" | "system",
@@ -39,6 +40,7 @@ Returns the current theme mode.
 Set the application theme.
 
 **Input:**
+
 ```json
 {
   "mode": "light" | "dark" | "system"
@@ -46,6 +48,7 @@ Set the application theme.
 ```
 
 **Output:**
+
 ```json
 {
   "success": true,
@@ -65,6 +68,7 @@ Returns the app's route registry so the AI knows what pages exist. The AI uses t
 **Input:** `{}` (no args)
 
 **Output:**
+
 ```json
 {
   "routes": [
@@ -84,6 +88,7 @@ Returns the app's route registry so the AI knows what pages exist. The AI uses t
 Navigate to a page by `id` from the route registry. The client applies the navigation when the verb succeeds.
 
 **Input:**
+
 ```json
 {
   "routeId": "accounting"
@@ -91,6 +96,7 @@ Navigate to a page by `id` from the route registry. The client applies the navig
 ```
 
 Or by path (for dynamic routes):
+
 ```json
 {
   "path": "/lists/abc-123"
@@ -98,6 +104,7 @@ Or by path (for dynamic routes):
 ```
 
 **Output:**
+
 ```json
 {
   "success": true,
@@ -112,6 +119,7 @@ Navigate back in history.
 **Input:** `{}`
 
 **Output:**
+
 ```json
 {
   "success": true
@@ -127,6 +135,7 @@ Navigate back in history.
 Search the app's content. Returns results the AI can present to the user or act on.
 
 **Input:**
+
 ```json
 {
   "query": "invoices",
@@ -135,13 +144,14 @@ Search the app's content. Returns results the AI can present to the user or act 
 }
 ```
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| query | yes | Search query string |
-| scope | no | Narrow results (e.g. "pages", "docs", "products") |
-| limit | no | Max results (default: 10) |
+| Field | Required | Description                                       |
+| ----- | -------- | ------------------------------------------------- |
+| query | yes      | Search query string                               |
+| scope | no       | Narrow results (e.g. "pages", "docs", "products") |
+| limit | no       | Max results (default: 10)                         |
 
 **Output:**
+
 ```json
 {
   "results": [
@@ -162,6 +172,7 @@ Search the app's content. Returns results the AI can present to the user or act 
 Open a search result by id. Navigates the user to the result.
 
 **Input:**
+
 ```json
 {
   "resultId": "result-001"
@@ -169,6 +180,7 @@ Open a search result by id. Navigates the user to the result.
 ```
 
 **Output:**
+
 ```json
 {
   "success": true,
@@ -185,6 +197,7 @@ Open a search result by id. Navigates the user to the result.
 Show a toast notification. Use for confirmations, warnings, or transient messages.
 
 **Input:**
+
 ```json
 {
   "message": "Settings saved successfully",
@@ -193,13 +206,14 @@ Show a toast notification. Use for confirmations, warnings, or transient message
 }
 ```
 
-| Field | Required | Description |
-|-------|----------|-------------|
-| message | yes | Message to display |
-| variant | no | `info`, `success`, `warning`, `error` (default: `info`) |
-| duration | no | Auto-dismiss after ms (default: 5000, 0 = persistent) |
+| Field    | Required | Description                                             |
+| -------- | -------- | ------------------------------------------------------- |
+| message  | yes      | Message to display                                      |
+| variant  | no       | `info`, `success`, `warning`, `error` (default: `info`) |
+| duration | no       | Auto-dismiss after ms (default: 5000, 0 = persistent)   |
 
 **Output:**
+
 ```json
 {
   "success": true,
@@ -212,6 +226,7 @@ Show a toast notification. Use for confirmations, warnings, or transient message
 Dismiss a specific toast or all toasts.
 
 **Input:**
+
 ```json
 {
   "toastId": "toast-abc"
@@ -221,6 +236,7 @@ Dismiss a specific toast or all toasts.
 Omit `toastId` to dismiss all toasts.
 
 **Output:**
+
 ```json
 {
   "success": true
@@ -238,6 +254,7 @@ List all registered modals the AI can open.
 **Input:** `{}`
 
 **Output:**
+
 ```json
 {
   "modals": [
@@ -260,6 +277,7 @@ List all registered modals the AI can open.
 Open a modal by id. Optionally pass data to pre-fill or configure the modal.
 
 **Input:**
+
 ```json
 {
   "modalId": "new-invoice",
@@ -268,6 +286,7 @@ Open a modal by id. Optionally pass data to pre-fill or configure the modal.
 ```
 
 **Output:**
+
 ```json
 {
   "success": true,
@@ -280,6 +299,7 @@ Open a modal by id. Optionally pass data to pre-fill or configure the modal.
 Close the currently open modal, or a specific modal by id.
 
 **Input:**
+
 ```json
 {
   "modalId": "new-invoice"
@@ -289,6 +309,7 @@ Close the currently open modal, or a specific modal by id.
 Omit `modalId` to close the top-most modal.
 
 **Output:**
+
 ```json
 {
   "success": true
@@ -306,6 +327,7 @@ List all registered forms on the current page or view.
 **Input:** `{}`
 
 **Output:**
+
 ```json
 {
   "forms": [
@@ -327,6 +349,7 @@ List all registered forms on the current page or view.
 Fill form fields with values. Does **not** submit — use `ui.form.submit` after filling.
 
 **Input:**
+
 ```json
 {
   "formId": "contact-form",
@@ -339,6 +362,7 @@ Fill form fields with values. Does **not** submit — use `ui.form.submit` after
 ```
 
 **Output:**
+
 ```json
 {
   "success": true,
@@ -351,6 +375,7 @@ Fill form fields with values. Does **not** submit — use `ui.form.submit` after
 Submit a form by id. Returns validation errors if the form is invalid.
 
 **Input:**
+
 ```json
 {
   "formId": "contact-form"
@@ -358,6 +383,7 @@ Submit a form by id. Returns validation errors if the form is invalid.
 ```
 
 **Output (success):**
+
 ```json
 {
   "success": true,
@@ -366,12 +392,11 @@ Submit a form by id. Returns validation errors if the form is invalid.
 ```
 
 **Output (validation failed):**
+
 ```json
 {
   "success": false,
-  "errors": [
-    { "field": "email", "message": "Invalid email address" }
-  ]
+  "errors": [{ "field": "email", "message": "Invalid email address" }]
 }
 ```
 
@@ -380,6 +405,7 @@ Submit a form by id. Returns validation errors if the form is invalid.
 Reset a form to its default values.
 
 **Input:**
+
 ```json
 {
   "formId": "contact-form"
@@ -387,6 +413,7 @@ Reset a form to its default values.
 ```
 
 **Output:**
+
 ```json
 {
   "success": true
@@ -404,6 +431,7 @@ Get the current user's session info. Returns auth status, display name, and role
 **Input:** `{}`
 
 **Output:**
+
 ```json
 {
   "authenticated": true,
@@ -421,6 +449,7 @@ Get the current user's session info. Returns auth status, display name, and role
 Log the user out. The AI **must** confirm with the user before calling this verb.
 
 **Input:**
+
 ```json
 {
   "confirmed": true
@@ -428,6 +457,7 @@ Log the user out. The AI **must** confirm with the user before calling this verb
 ```
 
 **Output:**
+
 ```json
 {
   "success": true
@@ -441,6 +471,7 @@ Get the current user's preferences.
 **Input:** `{}`
 
 **Output:**
+
 ```json
 {
   "preferences": {
@@ -561,11 +592,11 @@ The separation of `fill` and `submit` is intentional — it lets the AI confirm 
 
 ## Verb Library Levels
 
-| Level | Name | Contents |
-|-------|------|----------|
-| 0 | Website UI Starter | Theme, nav, search, modals, toasts, forms, session |
-| 1 | App Operations Starter | CRUD, table filters, export, settings |
-| 2 | Domain Packs | GIS, Pantry, CAD, etc. |
+| Level | Name                   | Contents                                           |
+| ----- | ---------------------- | -------------------------------------------------- |
+| 0     | Website UI Starter     | Theme, nav, search, modals, toasts, forms, session |
+| 1     | App Operations Starter | CRUD, table filters, export, settings              |
+| 2     | Domain Packs           | GIS, Pantry, CAD, etc.                             |
 
 ---
 

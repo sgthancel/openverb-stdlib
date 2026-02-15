@@ -7,12 +7,14 @@ We as contributors and maintainers pledge to make participation in this project 
 ## Our Standards
 
 Examples of positive behavior:
+
 - Using welcoming and inclusive language
 - Being respectful of differing viewpoints
 - Gracefully accepting constructive feedback
 - Focusing on what is best for the community
 
 Examples of unacceptable behavior:
+
 - Personal attacks or derogatory comments
 - Trolling or deliberately inflammatory remarks
 - Publishing others' private information without consent

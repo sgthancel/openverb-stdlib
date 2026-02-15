@@ -9,13 +9,24 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { useCallback } from "react";
-import { useOpenVerb, type OpenVerbConfig, type Route, type ModalEntry } from "../react/useOpenVerb";
+import {
+  useOpenVerb,
+  type OpenVerbConfig,
+  type Route,
+  type ModalEntry,
+} from "../react/useOpenVerb";
 
 // ---------------------------------------------------------------------------
 // Re-export types
 // ---------------------------------------------------------------------------
 
-export type { Route, ModalEntry, SearchResult, SessionUser, VerbResult } from "../react/useOpenVerb";
+export type {
+  Route,
+  ModalEntry,
+  SearchResult,
+  SessionUser,
+  VerbResult,
+} from "../react/useOpenVerb";
 
 // ---------------------------------------------------------------------------
 // Route Registry — define your app's pages here
@@ -87,10 +98,7 @@ export interface UseNextOpenVerbOptions {
 export function useNextOpenVerb(options: UseNextOpenVerbOptions = {}) {
   const router = useRouter();
 
-  const navigate = useCallback(
-    (path: string) => router.push(path),
-    [router]
-  );
+  const navigate = useCallback((path: string) => router.push(path), [router]);
 
   const goBack = useCallback(() => router.back(), [router]);
 

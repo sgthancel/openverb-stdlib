@@ -25,33 +25,33 @@ Think of it like Python's standard library, but for AI-app interaction. OpenVerb
 
 ### Level 0: Website UI Starter
 
-| Family | Verbs | Purpose |
-|--------|-------|---------|
-| `ui.theme` | `get`, `set` | Theme (light/dark/system) |
-| `ui.nav` | `list_pages`, `go`, `back` | Navigation & route discovery |
-| `ui.search` | `query`, `open_result` | On-site search |
-| `ui.toast` | `show`, `dismiss` | Notifications & feedback |
-| `ui.modal` | `open`, `close`, `list` | Modal dialogs |
-| `ui.form` | `list`, `fill`, `submit`, `reset` | Form interaction |
-| `user.session` | `get`, `logout`, `get_preferences` | User session & preferences |
+| Family         | Verbs                              | Purpose                      |
+| -------------- | ---------------------------------- | ---------------------------- |
+| `ui.theme`     | `get`, `set`                       | Theme (light/dark/system)    |
+| `ui.nav`       | `list_pages`, `go`, `back`         | Navigation & route discovery |
+| `ui.search`    | `query`, `open_result`             | On-site search               |
+| `ui.toast`     | `show`, `dismiss`                  | Notifications & feedback     |
+| `ui.modal`     | `open`, `close`, `list`            | Modal dialogs                |
+| `ui.form`      | `list`, `fill`, `submit`, `reset`  | Form interaction             |
+| `user.session` | `get`, `logout`, `get_preferences` | User session & preferences   |
 
 **Total: 7 families, 19 verbs.**
 
 ### Future Levels
 
-| Level | Name | Examples |
-|-------|------|----------|
-| 1 | App Operations Starter | CRUD, table filters, export, settings |
-| 2 | Domain Packs | GIS, Pantry, CAD, etc. |
+| Level | Name                   | Examples                              |
+| ----- | ---------------------- | ------------------------------------- |
+| 1     | App Operations Starter | CRUD, table filters, export, settings |
+| 2     | Domain Packs           | GIS, Pantry, CAD, etc.                |
 
 ## Part of the OpenVerb Ecosystem
 
 This is the **standard library** for the [OpenVerb](https://github.com/sgthancel/openverb) framework — an open, text-first standard for describing what actions an AI is allowed to perform inside an application.
 
-| Package | Registry | Description |
-|---------|----------|-------------|
-| `openverb` | [npm](https://www.npmjs.com/package/openverb) / [PyPI](https://pypi.org/project/openverb/) | Core framework — load & validate verb libraries |
-| `@openverb/stdlib` | npm (this repo) | Standard verb definitions for common UI operations |
+| Package            | Registry                                                                                   | Description                                        |
+| ------------------ | ------------------------------------------------------------------------------------------ | -------------------------------------------------- |
+| `openverb`         | [npm](https://www.npmjs.com/package/openverb) / [PyPI](https://pypi.org/project/openverb/) | Core framework — load & validate verb libraries    |
+| `@openverb/stdlib` | npm (this repo)                                                                            | Standard verb definitions for common UI operations |
 
 ## Quick Start
 
@@ -63,6 +63,7 @@ npm install openverb @openverb/stdlib
 ```
 
 Or with Python:
+
 ```bash
 pip install openverb
 # Then copy manifests/ from this repo into your project

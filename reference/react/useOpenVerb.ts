@@ -95,7 +95,11 @@ export interface OpenVerbConfig {
   getPreferences?: () => Record<string, unknown>;
 
   /** Search function (override to use your own search backend) */
-  search?: (query: string, scope?: string, limit?: number) => {
+  search?: (
+    query: string,
+    scope?: string,
+    limit?: number
+  ) => {
     results: SearchResult[];
     total: number;
   };
@@ -130,8 +134,7 @@ export function useOpenVerb(config: OpenVerbConfig) {
       const results = routes
         .filter(
           (r) =>
-            r.title.toLowerCase().includes(q) ||
-            r.tags.some((t) => t.toLowerCase().includes(q))
+            r.title.toLowerCase().includes(q) || r.tags.some((t) => t.toLowerCase().includes(q))
         )
         .slice(0, limit)
         .map((r) => ({
@@ -162,9 +165,7 @@ export function useOpenVerb(config: OpenVerbConfig) {
       // Navigation
       "ui.nav.list_pages": () => ({ routes }),
       "ui.nav.go": (input) => {
-        const route = input.routeId
-          ? routes.find((r) => r.id === input.routeId)
-          : null;
+        const route = input.routeId ? routes.find((r) => r.id === input.routeId) : null;
         const path = route ? route.path : (input.path as string);
         if (!path) return { success: false };
         navigate(path);
@@ -228,7 +229,9 @@ export function useOpenVerb(config: OpenVerbConfig) {
             id: form.dataset.openverbId!,
             title: form.dataset.openverbTitle || form.dataset.openverbId!,
             fields: Array.from(form.elements)
-              .filter((el): el is HTMLInputElement => "name" in el && !!(el as HTMLInputElement).name)
+              .filter(
+                (el): el is HTMLInputElement => "name" in el && !!(el as HTMLInputElement).name
+              )
               .map((el) => ({
                 name: el.name,
                 type: el.type || "text",
@@ -263,7 +266,10 @@ export function useOpenVerb(config: OpenVerbConfig) {
           return { success: false, errors: [{ field: "_form", message: "Form not found" }] };
         if (!form.checkValidity()) {
           const errors = Array.from(form.elements)
-            .filter((el): el is HTMLInputElement => !("validity" in el) || !(el as HTMLInputElement).validity.valid)
+            .filter(
+              (el): el is HTMLInputElement =>
+                !("validity" in el) || !(el as HTMLInputElement).validity.valid
+            )
             .map((el) => ({
               field: (el as HTMLInputElement).name,
               message: (el as HTMLInputElement).validationMessage,
@@ -307,9 +313,21 @@ export function useOpenVerb(config: OpenVerbConfig) {
       },
     }),
     [
-      routes, modals, navigate, goBack, showToast, dismissToast,
-      openModal, closeModal, getTheme, setTheme, getSession,
-      logout, getPreferences, search, defaultSearch,
+      routes,
+      modals,
+      navigate,
+      goBack,
+      showToast,
+      dismissToast,
+      openModal,
+      closeModal,
+      getTheme,
+      setTheme,
+      getSession,
+      logout,
+      getPreferences,
+      search,
+      defaultSearch,
     ]
   );
 
