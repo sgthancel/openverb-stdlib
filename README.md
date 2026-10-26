@@ -2,10 +2,10 @@
 
 [![CI](https://github.com/sgthancel/openverb-stdlib/actions/workflows/ci.yml/badge.svg)](https://github.com/sgthancel/openverb-stdlib/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Verbs](https://img.shields.io/badge/verbs-19-blue.svg)](docs/website-starter-verbs.md)
-[![Families](https://img.shields.io/badge/families-7-blue.svg)](docs/website-starter-verbs.md)
+[![Verbs](https://img.shields.io/badge/verbs-23-blue.svg)](docs/website-starter-verbs.md)
+[![Families](https://img.shields.io/badge/families-9-blue.svg)](docs/website-starter-verbs.md)
 
-A starter set of verb definitions that every app should have — theme, navigation, search, modals, toasts, forms, and sessions. These are the common baseline. Your app defines its own verb libraries for domain-specific actions on top of these.
+A starter set of verb definitions that every app should have — theme, navigation, search, modals, toasts, forms, sessions, pointing, and waiting. These are the common baseline. Your app defines its own verb libraries for domain-specific actions on top of these.
 
 > **The verbs every app needs. Your app adds the rest.**
 
@@ -20,6 +20,8 @@ This is **not** a complete list of all possible verbs — OpenVerb is designed s
 - Open modals
 - Fill and submit forms
 - Check who's logged in
+- Point at something without pressing it
+- Wait for the app to catch up before acting again
 
 ## Verb Families
 
@@ -33,9 +35,11 @@ This is **not** a complete list of all possible verbs — OpenVerb is designed s
 | `ui.toast`     | `show`, `dismiss`                  | Notifications & feedback     |
 | `ui.modal`     | `open`, `close`, `list`            | Modal dialogs                |
 | `ui.form`      | `list`, `fill`, `submit`, `reset`  | Form interaction             |
+| `ui.focus`     | `element`, `clear`                 | Drawing attention            |
+| `ui.wait`      | `for_element`, `for_route`         | Letting the app catch up     |
 | `user.session` | `get`, `logout`, `get_preferences` | User session & preferences   |
 
-**7 starter families, 19 starter verbs.** Your app adds its own verb libraries on top of these.
+**9 starter families, 23 starter verbs.** Your app adds its own verb libraries on top of these.
 
 ### Future Levels
 
@@ -81,6 +85,8 @@ manifests/
   ui.toast.json
   ui.modal.json
   ui.form.json
+  ui.focus.json
+  ui.wait.json
   user.session.json
 ```
 
@@ -108,6 +114,53 @@ Verbs return data. Your client applies the effect:
 - `ui.nav.go` → call `router.push(path)`
 - `ui.theme.set` → update `data-theme` attribute
 - `ui.toast.show` → render a toast component
+- `ui.focus.element` → style `[data-openverb-focus]` however you like
+
+## Showing, Not Just Doing
+
+`ui.focus` and `ui.wait` exist for a different job from the rest of the
+library. Everything else lets an AI operate an application; these two let
+it _show_ an application — a guided tour, an onboarding walkthrough, an
+answer to "where do I do that?" that points instead of describing.
+
+```javascript
+await executeVerb("ui.focus.element", {
+  selector: "#field-name",
+  label: "Start with a name",
+});
+```
+
+Two things are deliberate:
+
+**Name the element, never a coordinate.** A screen recording says "click
+at 420, 310" and breaks the first time a button moves. A selector
+survives a redesign, a responsive breakpoint and a theme change, which is
+the whole reason to describe a walkthrough declaratively rather than film
+it. `ui.focus.element` also accepts an `elementId`, or a visible `label`
+— so whoever writes the tour can name the button by what it says.
+
+**Pointing is not pressing.** `ui.focus.element` changes nothing and
+submits nothing. It sets `data-openverb-focus` on the element and returns
+where that element is right now, measured at call time. Style it from
+your own CSS, or pass `focusElement` to the hook to use a highlight you
+already have:
+
+```css
+[data-openverb-focus] {
+  outline: 2px solid var(--accent);
+  box-shadow: 0 0 0 8px color-mix(in oklab, var(--accent) 25%, transparent);
+}
+[data-openverb-focus]::after {
+  content: attr(data-openverb-label);
+}
+```
+
+`ui.wait` is the unglamorous half. `ui.nav.go` asks a router to move and
+returns immediately; a step that acts on what it expects to find next is
+racing the application, and that race is lost on a slower machine than
+the one the tour was written on. Both wait verbs report a timeout rather
+than throwing — the caller decides whether a missing element means stop
+or carry on, and a wait that cannot fail is a hang.
 
 ## Route Registry
 
@@ -149,6 +202,8 @@ openverb-stdlib/
     ui.toast.json               Toast verbs manifest
     ui.modal.json               Modal verbs manifest
     ui.form.json                Form verbs manifest
+    ui.focus.json               Attention verbs manifest
+    ui.wait.json                Synchronisation verbs manifest
     user.session.json           Session verbs manifest
   reference/
     vanilla/verbs.js            Plain JS implementation

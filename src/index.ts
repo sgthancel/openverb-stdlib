@@ -5,8 +5,9 @@
  * These are not exhaustive — they're the common baseline.
  * Apps define their own verb libraries for domain-specific actions.
  *
- * Level 0 (Website UI Starter): 7 families, 19 verbs
- * covering theme, navigation, search, modals, toasts, forms, and sessions.
+ * Level 0 (Website UI Starter): 9 families, 23 verbs covering theme,
+ * navigation, search, modals, toasts, forms, sessions, and — as of
+ * 0.2.0 — pointing at things and waiting for them.
  */
 
 export { manifests, getManifest, getAllVerbs, findVerb } from "./manifests.js";
@@ -35,6 +36,27 @@ export {
   TOAST_VERBS,
   MODAL_VERBS,
   FORM_VERBS,
+  FOCUS_VERBS,
+  WAIT_VERBS,
   SESSION_VERBS,
   ALL_VERB_IDS,
 } from "./constants.js";
+
+// The DOM helpers behind ui.focus.* and ui.wait.*. Exported because a
+// host that supplies its own highlight still wants the element
+// resolution — naming a thing three ways is the useful part, and
+// nobody should write it twice.
+export {
+  DEFAULT_WAIT_MS,
+  POLL_MS,
+  FOCUS_ATTR,
+  LABEL_ATTR,
+  findElement,
+  elementPresent,
+  mark,
+  clearMarks,
+  until,
+  pathMatches,
+  type DocumentLike,
+  type ElementLike,
+} from "./dom.js";

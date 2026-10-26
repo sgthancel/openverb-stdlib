@@ -1,0 +1,75 @@
+{
+  "family": "ui.wait",
+  "version": "1.0.0",
+  "verbs": [
+    {
+      "id": "ui.wait.for_element",
+      "version": "1.0.0",
+      "summary": "Wait until an element is present before going on. Use this between steps that depend on each other: an app that is still rendering has not finished the last instruction, and acting anyway means acting on a screen that has moved.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector to wait for."
+          },
+          "gone": {
+            "type": "boolean",
+            "description": "Wait for it to disappear instead of appear. Defaults to false."
+          },
+          "timeoutMs": {
+            "type": "number",
+            "description": "Give up after this long. Defaults to 5000. A wait that cannot fail is a hang."
+          }
+        },
+        "required": ["selector"]
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "timedOut": {
+            "type": "boolean",
+            "description": "True when it never arrived. Reported rather than thrown, so a caller can decide whether to carry on or stop."
+          },
+          "waitedMs": { "type": "number" }
+        }
+      }
+    },
+    {
+      "id": "ui.wait.for_route",
+      "version": "1.0.0",
+      "summary": "Wait until navigation has actually landed. ui.nav.go asks for a route; this is how you know the app arrived, which is not the same moment.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "routeId": {
+            "type": "string",
+            "description": "Route id, as listed by ui.nav.list_pages."
+          },
+          "path": {
+            "type": "string",
+            "description": "URL path, as an alternative to a route id."
+          },
+          "timeoutMs": {
+            "type": "number",
+            "description": "Give up after this long. Defaults to 5000."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "timedOut": { "type": "boolean" },
+          "path": {
+            "type": "string",
+            "description": "Where the app actually is, which is worth having when it is not where you asked for."
+          },
+          "waitedMs": { "type": "number" }
+        }
+      }
+    }
+  ]
+}

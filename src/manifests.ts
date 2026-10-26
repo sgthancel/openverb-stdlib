@@ -11,6 +11,8 @@ import uiSearch from "../manifests/ui.search.json";
 import uiToast from "../manifests/ui.toast.json";
 import uiModal from "../manifests/ui.modal.json";
 import uiForm from "../manifests/ui.form.json";
+import uiFocus from "../manifests/ui.focus.json";
+import uiWait from "../manifests/ui.wait.json";
 import userSession from "../manifests/user.session.json";
 
 /** All Level 0 verb manifests */
@@ -21,6 +23,8 @@ export const manifests: VerbManifest[] = [
   uiToast as VerbManifest,
   uiModal as VerbManifest,
   uiForm as VerbManifest,
+  uiFocus as VerbManifest,
+  uiWait as VerbManifest,
   userSession as VerbManifest,
 ];
 

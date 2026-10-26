@@ -1,0 +1,65 @@
+{
+  "family": "ui.focus",
+  "version": "1.0.0",
+  "verbs": [
+    {
+      "id": "ui.focus.element",
+      "version": "1.0.0",
+      "summary": "Draw the user's attention to one element without activating it. Use this before acting on something so the person watching knows where to look; a guided demo or a walkthrough is mostly this verb. Does not click, submit or change anything.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "selector": {
+            "type": "string",
+            "description": "CSS selector for the element. Prefer a stable id over a positional selector, so the call survives a redesign."
+          },
+          "elementId": {
+            "type": "string",
+            "description": "Element id, as an alternative to a selector."
+          },
+          "label": {
+            "type": "string",
+            "description": "Short text to show beside it, explaining why it matters."
+          },
+          "scroll": {
+            "type": "boolean",
+            "description": "Bring it into view first if it is off screen. Defaults to true."
+          }
+        },
+        "required": []
+      },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "found": {
+            "type": "boolean",
+            "description": "False when nothing matched, so a caller can skip rather than point at nothing."
+          },
+          "rect": {
+            "type": "object",
+            "description": "Where it is now, in viewport pixels. Measured at call time, because that is what lets the same instruction work against a layout that has since changed.",
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "width": { "type": "number" },
+              "height": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ui.focus.clear",
+      "version": "1.0.0",
+      "summary": "Stop drawing attention to anything. Call this when a walkthrough ends or is cancelled, so the interface is left as it was found.",
+      "input": { "type": "object", "properties": {}, "required": [] },
+      "output": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" }
+        }
+      }
+    }
+  ]
+}

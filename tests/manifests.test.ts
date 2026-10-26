@@ -3,24 +3,26 @@ import { manifests, getManifest, getAllVerbs, findVerb } from "../src/manifests.
 import { ALL_VERB_IDS } from "../src/constants.js";
 
 describe("manifests", () => {
-  it("should have 7 verb families", () => {
-    expect(manifests).toHaveLength(7);
+  it("should have 9 verb families", () => {
+    expect(manifests).toHaveLength(9);
   });
 
-  it("should have 19 total verbs", () => {
+  it("should have 23 total verbs", () => {
     const allVerbs = getAllVerbs();
-    expect(allVerbs).toHaveLength(19);
+    expect(allVerbs).toHaveLength(23);
   });
 
   it("should have all expected families", () => {
     const families = manifests.map((m) => m.family).sort();
     expect(families).toEqual([
+      "ui.focus",
       "ui.form",
       "ui.modal",
       "ui.nav",
       "ui.search",
       "ui.theme",
       "ui.toast",
+      "ui.wait",
       "user.session",
     ]);
   });
@@ -94,6 +96,18 @@ describe("findVerb", () => {
     const verb = findVerb("user.session.logout");
     expect(verb).toBeDefined();
     expect(verb!.summary).toContain("confirm");
+  });
+
+  it("should find ui.focus.element", () => {
+    const verb = findVerb("ui.focus.element");
+    expect(verb).toBeDefined();
+    // The summary has to rule out the thing a model would otherwise
+    // assume: that pointing at a button also presses it.
+    expect(verb!.summary).toContain("without activating it");
+  });
+
+  it("should find ui.wait.for_route", () => {
+    expect(findVerb("ui.wait.for_route")).toBeDefined();
   });
 
   it("should return undefined for unknown verb", () => {

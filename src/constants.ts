@@ -40,13 +40,23 @@ export const FORM_VERBS = {
   RESET: "ui.form.reset",
 } as const;
 
+export const FOCUS_VERBS = {
+  ELEMENT: "ui.focus.element",
+  CLEAR: "ui.focus.clear",
+} as const;
+
+export const WAIT_VERBS = {
+  FOR_ELEMENT: "ui.wait.for_element",
+  FOR_ROUTE: "ui.wait.for_route",
+} as const;
+
 export const SESSION_VERBS = {
   GET: "user.session.get",
   LOGOUT: "user.session.logout",
   GET_PREFERENCES: "user.session.get_preferences",
 } as const;
 
-/** All 19 starter verb IDs (Level 0). Your app will have more. */
+/** All 23 starter verb IDs (Level 0). Your app will have more. */
 export const ALL_VERB_IDS = [
   ...Object.values(THEME_VERBS),
   ...Object.values(NAV_VERBS),
@@ -54,5 +64,7 @@ export const ALL_VERB_IDS = [
   ...Object.values(TOAST_VERBS),
   ...Object.values(MODAL_VERBS),
   ...Object.values(FORM_VERBS),
+  ...Object.values(FOCUS_VERBS),
+  ...Object.values(WAIT_VERBS),
   ...Object.values(SESSION_VERBS),
 ] as const;

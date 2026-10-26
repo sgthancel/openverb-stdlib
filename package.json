@@ -1,35 +1,31 @@
 {
   "name": "@openverb/stdlib",
-  "version": "0.1.0",
-  "description": "OpenVerb Standard Library — canonical verb definitions for AI-app interaction (theme, navigation, search, modals, forms, sessions)",
+  "version": "0.2.0",
+  "description": "OpenVerb Standard Library — starter verb definitions for AI-app interaction (theme, navigation, search, modals, forms, sessions, focus, waiting)",
   "type": "module",
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/index.d.mts",
-        "default": "./dist/index.mjs"
-      },
-      "require": {
         "types": "./dist/index.d.ts",
         "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
       }
-    },
-    "./manifests": {
-      "import": "./manifests/index.mjs",
-      "require": "./manifests/index.js"
     },
     "./manifests/*": "./manifests/*",
     "./react": {
       "import": {
-        "types": "./dist/react.d.mts",
-        "default": "./dist/react.mjs"
-      },
-      "require": {
         "types": "./dist/react.d.ts",
         "default": "./dist/react.js"
+      },
+      "require": {
+        "types": "./dist/react.d.cts",
+        "default": "./dist/react.cjs"
       }
     }
   },
@@ -64,6 +60,10 @@
     "search",
     "modals",
     "forms",
+    "focus",
+    "walkthrough",
+    "onboarding",
+    "product-demo",
     "ai-agent",
     "llm",
     "ai-tools",

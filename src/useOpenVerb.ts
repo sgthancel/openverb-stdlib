@@ -5,6 +5,16 @@
 import { useCallback, useMemo } from "react";
 import type { Route, ModalEntry, SearchResult } from "./types.js";
 import type { VerbResult, VerbHandlers } from "./handlers.js";
+import {
+  DEFAULT_WAIT_MS,
+  clearMarks,
+  elementPresent,
+  findElement,
+  mark,
+  now,
+  pathMatches,
+  until,
+} from "./dom.js";
 
 export interface OpenVerbConfig {
   routes: Route[];
@@ -27,6 +37,17 @@ export interface OpenVerbConfig {
   };
   logout?: () => Promise<void> | void;
   getPreferences?: () => Record<string, unknown>;
+  /**
+   * Draw attention to an element.
+   *
+   * Optional: without it the library marks the element itself, which
+   * works in any DOM application. Provide it when the app already has a
+   * highlight of its own and should keep using it.
+   */
+  focusElement?: (element: Element, label?: string) => void;
+  clearFocus?: () => void;
+  /** Where the app currently is, if its router can say. */
+  currentPath?: () => string;
   search?: (
     query: string,
     scope?: string,
@@ -52,6 +73,9 @@ export function useOpenVerb(config: OpenVerbConfig) {
     getSession,
     logout,
     getPreferences,
+    focusElement,
+    clearFocus,
+    currentPath,
     search,
   } = config;
 
@@ -152,6 +176,97 @@ export function useOpenVerb(config: OpenVerbConfig) {
         logout();
         return { success: true };
       },
+      /**
+       * Pointing, which has no default anywhere else.
+       *
+       * Operating an interface and SHOWING someone the interface are
+       * different jobs, and until now the library could only do the
+       * first: nav, forms and modals can press things but nothing could
+       * say look here. A guided walkthrough is mostly this verb.
+       *
+       * The element is resolved and measured at call time rather than
+       * recorded in advance, which is what lets the same instruction
+       * survive a layout that has since changed.
+       */
+      "ui.focus.element": (input) => {
+        const element = findElement(input);
+        if (!element) return { success: false, found: false };
+
+        const scrollable = element as { scrollIntoView?: (o?: object) => void };
+        if (input.scroll !== false && typeof scrollable.scrollIntoView === "function") {
+          scrollable.scrollIntoView({ block: "center", behavior: "smooth" });
+        }
+
+        if (focusElement) {
+          focusElement(element as unknown as Element, input.label as string | undefined);
+        } else {
+          // A plain attribute rather than injected styling: the host owns
+          // how a focused thing looks, and can target it from its own CSS.
+          mark(element, input.label as string | undefined);
+        }
+
+        // Measured here rather than recorded in advance, which is what
+        // lets the same instruction point correctly at a layout that has
+        // changed since it was written.
+        const measurable = element as { getBoundingClientRect?: () => DOMRect };
+        const box = measurable.getBoundingClientRect?.();
+        return {
+          success: true,
+          found: true,
+          rect: box ? { x: box.left, y: box.top, width: box.width, height: box.height } : undefined,
+        };
+      },
+      "ui.focus.clear": () => {
+        if (clearFocus) clearFocus();
+        else clearMarks();
+        return { success: true };
+      },
+
+      /**
+       * Waiting, because asking is not arriving.
+       *
+       * ui.nav.go asks a router to move and returns straight away. An
+       * instruction that acts on what it expects to be there next is
+       * racing the application, and the race is lost on a slow machine
+       * rather than on the one it was written on.
+       *
+       * A timeout is reported rather than thrown: the caller decides
+       * whether a missing element means stop or carry on, and a wait
+       * that cannot fail is a hang.
+       */
+      "ui.wait.for_element": async (input) => {
+        const selector = String(input.selector ?? "");
+        const gone = input.gone === true;
+        const timeoutMs = Number(input.timeoutMs) || DEFAULT_WAIT_MS;
+        if (!selector) return { success: false, timedOut: false, waitedMs: 0 };
+
+        const started = now();
+        const settled = await until(() => elementPresent(selector) !== gone, timeoutMs);
+        return { success: settled, timedOut: !settled, waitedMs: now() - started };
+      },
+      "ui.wait.for_route": async (input) => {
+        const route = input.routeId ? routes.find((r) => r.id === input.routeId) : null;
+        const wanted = route ? route.path : ((input.path as string) ?? "");
+        const timeoutMs = Number(input.timeoutMs) || DEFAULT_WAIT_MS;
+        const where = () =>
+          currentPath
+            ? currentPath()
+            : typeof window !== "undefined"
+              ? window.location.pathname
+              : "";
+
+        if (!wanted) return { success: false, timedOut: false, path: where(), waitedMs: 0 };
+
+        const started = now();
+        const settled = await until(() => pathMatches(where(), wanted), timeoutMs);
+        return {
+          success: settled,
+          timedOut: !settled,
+          path: where(),
+          waitedMs: now() - started,
+        };
+      },
+
       "user.session.get_preferences": () => {
         if (!getPreferences) {
           return {
@@ -179,6 +294,9 @@ export function useOpenVerb(config: OpenVerbConfig) {
       getSession,
       logout,
       getPreferences,
+      focusElement,
+      clearFocus,
+      currentPath,
       search,
       defaultSearch,
     ]
