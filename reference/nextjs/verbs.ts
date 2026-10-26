@@ -97,10 +97,16 @@ export interface UseNextOpenVerbOptions {
 
 export function useNextOpenVerb(options: UseNextOpenVerbOptions = {}) {
   const router = useRouter();
+  const pathname = usePathname();
 
   const navigate = useCallback((path: string) => router.push(path), [router]);
 
   const goBack = useCallback(() => router.back(), [router]);
+
+  // router.push resolves before the route has rendered, so
+  // ui.wait.for_route needs a live reading of where the app actually
+  // is. usePathname re-renders on arrival, which is the signal.
+  const currentPath = useCallback(() => pathname, [pathname]);
 
   // Theme: uses data-theme attribute + localStorage
   const getTheme = useCallback(() => {
@@ -135,6 +141,10 @@ export function useNextOpenVerb(options: UseNextOpenVerbOptions = {}) {
     getSession: options.getSession,
     logout: options.logout,
     getPreferences: options.getPreferences,
+    currentPath,
+    // focusElement and clearFocus are deliberately left out: without
+    // them ui.focus.element marks data-openverb-focus and the app
+    // styles it. Pass your own only if you already have a highlight.
     search: options.search,
   });
 }

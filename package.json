@@ -1,6 +1,6 @@
 {
   "name": "@openverb/stdlib",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "OpenVerb Standard Library — starter verb definitions for AI-app interaction (theme, navigation, search, modals, forms, sessions, focus, waiting)",
   "type": "module",
   "main": "./dist/index.cjs",

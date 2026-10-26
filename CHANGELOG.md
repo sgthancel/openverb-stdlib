@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.1] - 2026-10-25
+
+### Fixed
+
+- `reference/react/useOpenVerb.ts` was a second, hand-maintained copy of
+  the hook, and 0.2.0 shipped it still answering nineteen verbs — so
+  anyone who pasted it got a walkthrough that could operate an app but
+  not point at it. Its `executeVerb` was also synchronous, which returns
+  a pending Promise for the two waiting verbs instead of a result. It now
+  re-exports the package hook: one implementation, nothing to drift.
+  Copy-paste without a build step is what `reference/vanilla/verbs.js` is
+  for, and that one is standalone and up to date.
+- `reference/nextjs/verbs.ts` imported `usePathname` and never used it.
+  It now wires it to `currentPath`, which is what `ui.wait.for_route`
+  needs: `router.push` resolves before the route has rendered, and
+  `usePathname` re-renders on arrival.
+
+### Added
+
+- The handler-coverage check now runs against every implementation that
+  claims to answer the whole verb set, not just the package hook, and
+  asserts that the React reference stays a re-export. Verified by
+  breaking it on purpose: it names the missing verb.
+
 ## [0.2.0] - 2026-10-25
 
 ### Added
