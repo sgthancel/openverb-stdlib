@@ -5,6 +5,48 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.3.0] - 2026-10-25
+
+### Fixed
+
+- **The four `ui.form.*` verbs did nothing.** They returned
+  `{ success: true }` and never touched a form. That is the worst shape a
+  stub can take: a walkthrough calls fill, is told it worked, and submits
+  an empty form a beat later with nothing anywhere saying why. Every
+  other unconfigured verb in this library says so plainly. They now do
+  the work, against `[data-openverb-id]`, and report which fields were
+  actually set.
+
+### Added
+
+- `forms`, `fillField`, `submitForm` and `resetForm` on `OpenVerbConfig`,
+  all optional, for an app that would rather fill its own fields.
+- `ui.form.fill` accepts a single `field`/`value` pair as well as a
+  `values` map. A walkthrough usually fills one field per beat so there
+  is something to say between them.
+- `ui.form.fill` output now carries `filled` and `missing`.
+- `findForm`, `findField`, `setFieldValue` and `FORM_ATTR` exported.
+
+### Notes
+
+Filling a React field correctly took three attempts, and only a real
+browser caught the first two.
+
+- Assigning `.value` is invisible to React, which shadows the prototype
+  accessor with its own value tracker and treats the write as already
+  seen. Text fields go through the prototype descriptor instead.
+- The same trick does not work for checkboxes. React wires a checkbox
+  `onChange` to the CLICK event, so setting `checked` and firing
+  input/change ticks the box and tells the application nothing. A
+  checkbox is clicked, and only when it is not already in the state
+  being asked for, because a click toggles.
+
+The unit tests passed both broken versions, because the stub they ran
+against was easier to satisfy than a real input. They now model React's
+value tracker as an own property shadowing the prototype, and the
+checkbox as something that toggles on click. Verified against React
+18.3.1 in a browser: 10 assertions on live state, plus 84 unit tests.
+
 ## [0.2.1] - 2026-10-25
 
 ### Fixed

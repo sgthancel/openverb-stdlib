@@ -57,7 +57,7 @@
     {
       "id": "ui.form.fill",
       "version": "1.0.0",
-      "summary": "Fill form fields with values. Does not submit — use ui.form.submit after filling.",
+      "summary": "Fill one or more fields in a form by id. Does not submit: fill, let the person see what was typed, then submit. Reports which fields were actually set, so a step can stop rather than carry on into an empty form.",
       "input": {
         "type": "object",
         "properties": {
@@ -67,7 +67,15 @@
           },
           "values": {
             "type": "object",
-            "description": "Key-value map of field names to values"
+            "description": "Key-value map of field names to values. Fills several fields at once."
+          },
+          "field": {
+            "type": "string",
+            "description": "A single field name, as an alternative to `values`. A walkthrough usually fills one field per step so there is something to say between them."
+          },
+          "value": {
+            "type": "string",
+            "description": "The value for `field`."
           }
         },
         "required": ["formId", "values"]
@@ -83,7 +91,14 @@
             "items": {
               "type": "string"
             },
-            "description": "List of field names that were filled"
+            "description": "The fields that were actually set."
+          },
+          "missing": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Fields that were asked for and not found. Claiming success for a field that does not exist is how a walkthrough ends up submitting an empty form with nothing saying why."
           }
         }
       }

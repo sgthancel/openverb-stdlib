@@ -147,6 +147,108 @@ export function until(ready: () => boolean, timeoutMs: number): Promise<boolean>
 }
 
 /**
+ * Forms, which until 0.3.0 the package only pretended to fill.
+ *
+ * The four ui.form.* handlers returned `{ success: true }` and did
+ * nothing. That is the worst shape a stub can take: a walkthrough calls
+ * fill, is told it worked, and submits an empty form one beat later with
+ * nothing anywhere saying why. Every other unconfigured verb in this
+ * library says so plainly; these now do the work instead.
+ */
+
+/** The attribute a form carries so verbs can name it. */
+export const FORM_ATTR = "data-openverb-id";
+
+export function findForm(formId: string, doc: DocumentLike | null = ambient()): ElementLike | null {
+  if (!doc || !formId) return null;
+  // CSS.escape is not on DocumentLike and not worth requiring; an id
+  // with a quote in it is a naming problem, not a lookup problem.
+  try {
+    return doc.querySelector(`[${FORM_ATTR}="${formId}"]`);
+  } catch {
+    return null;
+  }
+}
+
+/** A field within a form: by name first, since that is what forms use. */
+export function findField(form: ElementLike, name: string): ElementLike | null {
+  const scope = form as unknown as DocumentLike;
+  if (typeof scope.querySelector !== "function" || !name) return null;
+  try {
+    return scope.querySelector(`[name="${name}"]`) ?? scope.querySelector(`#${name}`) ?? null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Set a field's value so the application notices.
+ *
+ * Assigning `.value` is enough for the DOM and invisible to React, which
+ * tracks the previous value on the node and skips the change event when
+ * the two look the same. The library would fill a field, the app's state
+ * would stay empty, and submit would send nothing - so the value goes in
+ * through the prototype's own setter and the event is dispatched by
+ * hand. Most hosts here are React, and a fill that only convinces the
+ * DOM is the stub again in a different costume.
+ */
+function assignThroughPrototype(
+  node: Record<string, unknown>,
+  property: "value" | "checked",
+  next: unknown
+): void {
+  // Walk up, because the setter lives on HTMLInputElement.prototype
+  // rather than on the node, and a subclass may sit in between.
+  let level: object | null = Object.getPrototypeOf(node) as object | null;
+  while (level) {
+    const descriptor = Object.getOwnPropertyDescriptor(level, property);
+    if (descriptor?.set) {
+      descriptor.set.call(node, next);
+      return;
+    }
+    level = Object.getPrototypeOf(level) as object | null;
+  }
+  node[property] = next;
+}
+
+export function setFieldValue(field: ElementLike, value: string): boolean {
+  const node = field as unknown as Record<string, unknown> & {
+    type?: string;
+    dispatchEvent?: (event: unknown) => boolean;
+  };
+  if (!node || typeof node.dispatchEvent !== "function") return false;
+
+  // A checkbox is not a text field with a different setter. React wires
+  // its onChange to the CLICK event, so setting `checked` and firing
+  // input/change ticks the box in the DOM and tells the application
+  // nothing - it re-renders the old state straight back over it. The
+  // honest way to tick a box is to click it, and only when it is not
+  // already in the state being asked for, since a click toggles.
+  if (node.type === "checkbox" || node.type === "radio") {
+    const on = value === "true" || value === "on" || value === "1";
+    if (node.checked === on) return true;
+    // MouseEvent where there is one; a plain Event elsewhere, so this
+    // does not throw outside a browser.
+    const click =
+      typeof MouseEvent === "function"
+        ? new MouseEvent("click", { bubbles: true, cancelable: true })
+        : new Event("click", { bubbles: true, cancelable: true });
+    node.dispatchEvent(click);
+    return true;
+  }
+
+  // Text fields are the opposite case: assigning `value` is what React
+  // suppresses, because its tracker shadows the prototype accessor and
+  // records the write as already seen. Going through the prototype
+  // descriptor steps around the tracker so the change counts.
+  assignThroughPrototype(node, "value", value);
+  for (const type of ["input", "change"]) {
+    node.dispatchEvent(new Event(type, { bubbles: true }));
+  }
+  return true;
+}
+
+/**
  * Compare where the app is with where it was asked to go.
  *
  * Trailing slashes and a leading slash are noise here: a route

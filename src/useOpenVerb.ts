@@ -3,13 +3,16 @@
  */
 
 import { useCallback, useMemo } from "react";
-import type { Route, ModalEntry, SearchResult } from "./types.js";
+import type { Route, ModalEntry, SearchResult, FormEntry } from "./types.js";
 import type { VerbResult, VerbHandlers } from "./handlers.js";
 import {
   DEFAULT_WAIT_MS,
   clearMarks,
   elementPresent,
   findElement,
+  findField,
+  findForm,
+  setFieldValue,
   mark,
   now,
   pathMatches,
@@ -37,6 +40,17 @@ export interface OpenVerbConfig {
   };
   logout?: () => Promise<void> | void;
   getPreferences?: () => Record<string, unknown>;
+  /** The forms this app has, for ui.form.list. */
+  forms?: FormEntry[];
+  /**
+   * Fill one field, if the app would rather do it itself.
+   *
+   * Optional: without it the library finds `[data-openverb-id]` and sets
+   * the field through the DOM, in a way React notices.
+   */
+  fillField?: (formId: string, field: string, value: string) => boolean;
+  submitForm?: (formId: string) => { success: boolean; errors?: unknown[] };
+  resetForm?: (formId: string) => boolean;
   /**
    * Draw attention to an element.
    *
@@ -73,6 +87,10 @@ export function useOpenVerb(config: OpenVerbConfig) {
     getSession,
     logout,
     getPreferences,
+    forms = [],
+    fillField,
+    submitForm,
+    resetForm,
     focusElement,
     clearFocus,
     currentPath,
@@ -162,10 +180,87 @@ export function useOpenVerb(config: OpenVerbConfig) {
         closeModal(input.modalId as string | undefined);
         return { success: true };
       },
-      "ui.form.list": () => ({ forms: [] }),
-      "ui.form.fill": () => ({ success: true, filled: [] }),
-      "ui.form.submit": () => ({ success: true, errors: [] }),
-      "ui.form.reset": () => ({ success: true }),
+      "ui.form.list": () => ({ forms }),
+
+      /**
+       * Filling, honestly.
+       *
+       * Takes `values` as a map, or a single `field`/`value` pair - a
+       * walkthrough usually wants one field per beat so there is
+       * something to narrate between them, and writing a one-key object
+       * for that is noise.
+       *
+       * Reports which fields were actually set. A fill that claims
+       * success for a field that does not exist is how a demo ends up
+       * submitting an empty form with nothing saying why.
+       */
+      "ui.form.fill": (input) => {
+        const formId = String(input.formId ?? "");
+        const values: Record<string, unknown> =
+          input.values && typeof input.values === "object" && !Array.isArray(input.values)
+            ? (input.values as Record<string, unknown>)
+            : input.field
+              ? { [String(input.field)]: input.value }
+              : {};
+
+        const wanted = Object.keys(values);
+        if (wanted.length === 0) return { success: false, filled: [], missing: [] };
+
+        const form = fillField ? null : findForm(formId);
+        if (!fillField && !form) {
+          return { success: false, filled: [], missing: wanted, error: "form not found" };
+        }
+
+        const filled: string[] = [];
+        const missing: string[] = [];
+        for (const name of wanted) {
+          const text = values[name] == null ? "" : String(values[name]);
+          const done = fillField
+            ? fillField(formId, name, text)
+            : (() => {
+                const field = findField(form!, name);
+                return field ? setFieldValue(field, text) : false;
+              })();
+          (done ? filled : missing).push(name);
+        }
+
+        return { success: missing.length === 0, filled, missing };
+      },
+
+      "ui.form.submit": (input) => {
+        const formId = String(input.formId ?? "");
+        if (submitForm) {
+          const result = submitForm(formId);
+          return { success: result.success, errors: result.errors ?? [] };
+        }
+
+        const form = findForm(formId) as unknown as {
+          requestSubmit?: () => void;
+          submit?: () => void;
+        } | null;
+        if (!form) return { success: false, errors: [], error: "form not found" };
+
+        // requestSubmit runs validation and fires the submit event, which
+        // is what the application is listening for. form.submit() skips
+        // both and is almost never what anyone means.
+        if (typeof form.requestSubmit === "function") form.requestSubmit();
+        else if (typeof form.submit === "function") form.submit();
+        else return { success: false, errors: [], error: "not a form" };
+
+        return { success: true, errors: [] };
+      },
+
+      "ui.form.reset": (input) => {
+        const formId = String(input.formId ?? "");
+        if (resetForm) return { success: resetForm(formId) };
+
+        const form = findForm(formId) as unknown as { reset?: () => void } | null;
+        if (!form || typeof form.reset !== "function") {
+          return { success: false, error: "form not found" };
+        }
+        form.reset();
+        return { success: true };
+      },
       "user.session.get": () => {
         if (!getSession) return { authenticated: false, user: null };
         return getSession();
@@ -294,6 +389,10 @@ export function useOpenVerb(config: OpenVerbConfig) {
       getSession,
       logout,
       getPreferences,
+      forms,
+      fillField,
+      submitForm,
+      resetForm,
       focusElement,
       clearFocus,
       currentPath,
