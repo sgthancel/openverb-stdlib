@@ -6,6 +6,7 @@
       "id": "ui.search.query",
       "version": "1.0.0",
       "summary": "Search the app's content. Returns a list of results the AI can present or act on.",
+      "effects": "read",
       "input": {
         "type": "object",
         "properties": {
@@ -66,6 +67,7 @@
       "id": "ui.search.open_result",
       "version": "1.0.0",
       "summary": "Open a search result by id. Navigates the user to the result.",
+      "effects": "ui",
       "input": {
         "type": "object",
         "properties": {

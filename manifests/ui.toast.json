@@ -6,6 +6,7 @@
       "id": "ui.toast.show",
       "version": "1.0.0",
       "summary": "Show a toast notification to the user. Use for confirmations, warnings, or transient messages.",
+      "effects": "ui",
       "input": {
         "type": "object",
         "properties": {
@@ -42,6 +43,7 @@
       "id": "ui.toast.dismiss",
       "version": "1.0.0",
       "summary": "Dismiss a toast notification by id, or dismiss all toasts.",
+      "effects": "ui",
       "input": {
         "type": "object",
         "properties": {

@@ -162,6 +162,64 @@ the one the tour was written on. Both wait verbs report a timeout rather
 than throwing — the caller decides whether a missing element means stop
 or carry on, and a wait that cannot fail is a hang.
 
+## What a Verb Touches
+
+Every verb in this library is safe to fire. A host's own verbs are not:
+the same mechanism that lets an assistant navigate a page lets it send an
+invoice, and until 0.4.0 nothing in the format told those apart.
+
+That is tolerable while a person reads each call and approves it. It
+stops being tolerable the moment calls are run from a **file** — a
+product tour, an onboarding walkthrough, a scripted sequence — because
+nobody is reading anything and there is an audience.
+
+So every verb declares what it touches:
+
+| `effects`  | Means                                                   | Undone by a refresh? |
+| ---------- | ------------------------------------------------------- | -------------------- |
+| `read`     | Reads. Changes nothing.                                 | nothing to undo      |
+| `ui`       | Changes what is on screen.                              | yes                  |
+| `data`     | Changes what the application has stored.                | no                   |
+| `external` | Leaves the app: messages, money, anything irreversible. | no                   |
+
+```js
+import { decide } from "@openverb/stdlib";
+
+const verdict = decide(verbId, verb, { limit: "ui" });
+if (!verdict.allowed) throw new Error(verdict.reason);
+```
+
+**An undeclared verb counts as `external`.** Verb libraries written
+before this field have no effects on anything, and the two possible
+defaults are not equally wrong. Assume safe, and every dangerous verb in
+every existing library is scriptable on day one. Assume dangerous, and a
+host adds one field to the verbs it wants scripted. The second failure is
+a refusal naming the verb; the first is an invoice. A typo counts as
+`external` too — `effects: "safe"` is not a permission.
+
+**Two parties, deliberately.** The host owns the verb library and knows
+what its verbs do, so the host declares effects and sets the policy. The
+document only chooses from what it is allowed. A document that could
+widen its own permissions would not be a permission.
+
+**Two of these 23 are refused by default**, and it is worth saying why:
+
+- `ui.form.submit` — submitting a form sends data somewhere this library
+  cannot see. Whether that is reversible is the application's business.
+- `user.session.logout` — ends a real session for a real person who may
+  not be able to get back in.
+
+A product tour has to be able to press Create, so the host permits it:
+
+```js
+decide("ui.form.submit", verb, { allow: ["ui.form.submit"] });
+```
+
+That is the honest shape of the escape hatch. The host is the one who
+knows its own submit writes to a scratchpad during a demo, so the host
+says so, per verb, in its own code — and says it where a reviewer can
+see it, rather than it being implied by a file somebody emailed over.
+
 ## Route Registry
 
 For `ui.nav.list_pages` and `ui.nav.go`, maintain a route registry so the AI knows what pages exist:

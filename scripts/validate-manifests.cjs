@@ -9,7 +9,15 @@
  * 3. Each verb has: id, version, summary, input, output
  * 4. Verb ids start with the family name
  * 5. Input and output are objects with "type": "object"
+ * 6. Each verb declares "effects" (read | ui | data | external)
+ *
+ * The effects check is a hard failure here and only here. In the library
+ * a missing declaration is survivable - it is read as "external" and
+ * refused - but this repo publishes the manifests other people copy, so
+ * shipping one that silently refuses itself helps nobody.
  */
+
+const EFFECTS = ["read", "ui", "data", "external"];
 
 const fs = require("fs");
 const path = require("path");
@@ -71,6 +79,16 @@ for (const file of files) {
     if (!verb.id || typeof verb.id !== "string") {
       fail(file, `Verb missing "id"`);
       continue;
+    }
+
+    // 6. Effects must be declared, and must be one of the four.
+    if (verb.effects === undefined) {
+      fail(file, `Verb "${verb.id}" does not declare "effects"`);
+    } else if (!EFFECTS.includes(verb.effects)) {
+      fail(
+        file,
+        `Verb "${verb.id}" has effects "${verb.effects}"; expected one of ${EFFECTS.join(", ")}`
+      );
     }
 
     // 4. Verb id must start with family name

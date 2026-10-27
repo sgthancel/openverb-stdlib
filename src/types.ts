@@ -60,6 +60,15 @@ export interface VerbDefinition {
   id: string;
   version: string;
   summary: string;
+  /**
+   * What this verb touches: "read", "ui", "data" or "external".
+   *
+   * Optional in the type because verb libraries written before this
+   * field exist and still have to load. It is not optional in effect: a
+   * verb that declares nothing is treated as "external" and anything
+   * running verbs from a file will refuse it. See src/effects.ts.
+   */
+  effects?: string;
   input: Record<string, unknown>;
   output: Record<string, unknown>;
 }

@@ -6,6 +6,7 @@
       "id": "user.session.get",
       "version": "1.0.0",
       "summary": "Get the current user's session info. Returns auth status, display name, and role. Never exposes tokens or passwords.",
+      "effects": "read",
       "input": {
         "type": "object",
         "properties": {},
@@ -43,6 +44,7 @@
       "id": "user.session.logout",
       "version": "1.0.0",
       "summary": "Log the user out. Requires explicit user confirmation before the AI calls this.",
+      "effects": "external",
       "input": {
         "type": "object",
         "properties": {
@@ -66,6 +68,7 @@
       "id": "user.session.get_preferences",
       "version": "1.0.0",
       "summary": "Get the current user's preferences (language, timezone, notification settings, etc.).",
+      "effects": "read",
       "input": {
         "type": "object",
         "properties": {},

@@ -6,6 +6,7 @@
       "id": "ui.modal.open",
       "version": "1.0.0",
       "summary": "Open a modal by id. The app registers named modals; the AI triggers them by id.",
+      "effects": "ui",
       "input": {
         "type": "object",
         "properties": {
@@ -36,6 +37,7 @@
       "id": "ui.modal.close",
       "version": "1.0.0",
       "summary": "Close the currently open modal, or a specific modal by id.",
+      "effects": "ui",
       "input": {
         "type": "object",
         "properties": {
@@ -59,6 +61,7 @@
       "id": "ui.modal.list",
       "version": "1.0.0",
       "summary": "List all registered modals the AI can open.",
+      "effects": "read",
       "input": {
         "type": "object",
         "properties": {},

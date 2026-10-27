@@ -11,6 +11,19 @@
  */
 
 export { manifests, getManifest, getAllVerbs, findVerb } from "./manifests.js";
+// What a verb touches, and what a caller will permit. Needed by
+// anything that runs verbs from a file rather than from a person.
+export {
+  type VerbEffects,
+  type Policy,
+  type Decision,
+  EFFECT_ORDER,
+  UNDECLARED,
+  isVerbEffects,
+  effectsOf,
+  withinLimit,
+  decide,
+} from "./effects.js";
 export { routeRegistry, type Route, findRouteByIntent, getRoutesForRole } from "./registries.js";
 export {
   createVerbHandlers,

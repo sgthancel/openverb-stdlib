@@ -6,6 +6,7 @@
       "id": "ui.form.list",
       "version": "1.0.0",
       "summary": "List all registered forms on the current page or view.",
+      "effects": "read",
       "input": {
         "type": "object",
         "properties": {},
@@ -58,6 +59,7 @@
       "id": "ui.form.fill",
       "version": "1.0.0",
       "summary": "Fill one or more fields in a form by id. Does not submit: fill, let the person see what was typed, then submit. Reports which fields were actually set, so a step can stop rather than carry on into an empty form.",
+      "effects": "ui",
       "input": {
         "type": "object",
         "properties": {
@@ -107,6 +109,7 @@
       "id": "ui.form.submit",
       "version": "1.0.0",
       "summary": "Submit a form by id. Returns validation errors if the form is invalid.",
+      "effects": "external",
       "input": {
         "type": "object",
         "properties": {
@@ -145,6 +148,7 @@
       "id": "ui.form.reset",
       "version": "1.0.0",
       "summary": "Reset a form to its default values.",
+      "effects": "ui",
       "input": {
         "type": "object",
         "properties": {

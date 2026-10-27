@@ -5,6 +5,50 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2026-10-26
+
+### Added
+
+- **`effects` on every verb**, and the policy check that reads it. Every
+  verb in this library is safe to fire; a host's own verbs are not, and
+  the same mechanism that lets an assistant navigate a page lets it send
+  an invoice. That is survivable while a person approves each call and
+  stops being survivable the moment calls run from a file, where nobody
+  is reading and there is an audience.
+  - Four values: `read`, `ui`, `data`, `external`. The line that matters
+    for anything scripted is between `ui` and `data` — whether a refresh
+    undoes it.
+  - `decide(verbId, verb, policy)` returns a decision with a reason,
+    not a boolean. A refusal that cannot name the verb it refused sends
+    whoever wrote the document hunting through a manifest.
+  - Also exported: `effectsOf`, `withinLimit`, `isVerbEffects`,
+    `EFFECT_ORDER`, `UNDECLARED`, and the `VerbEffects` / `Policy` /
+    `Decision` types.
+- All 23 verbs annotated. Twenty-one are callable from a walkthrough by
+  default. Two are not: `ui.form.submit`, because submitting sends data
+  somewhere this library cannot see, and `user.session.logout`, because
+  it ends a real session for a real person. A host permits those per
+  verb, in its own code, where a reviewer can see it.
+- The manifest validator now requires `effects` and rejects a value that
+  is not one of the four. Hard failure here and only here: in the
+  library a missing declaration is survivable, but this repo publishes
+  the manifests other people copy.
+
+### Notes on the default
+
+An undeclared verb counts as `external`, which is a deliberate choice
+rather than a conservative reflex. Verb libraries written before this
+field have no effects on anything, and the two possible defaults are not
+equally wrong: assume safe and every dangerous verb in every existing
+library becomes scriptable on day one; assume dangerous and a host adds
+one field to the verbs it wants scripted. The second failure is a clear
+refusal. A typo is treated as `external` too, because `effects: "safe"`
+should not be a way to grant yourself permission.
+
+The host declares effects and sets the policy; the document only chooses
+from what it is allowed. A document that could widen its own permissions
+would not be a permission.
+
 ## [0.3.0] - 2026-10-25
 
 ### Fixed
